@@ -2,7 +2,7 @@
 
 Dirsha is a comprehensive agricultural support platform designed to empower farmers with real-time market data, crop advice, and a bonds marketplace. With multilingual and voice support, Dirsha makes agricultural information and services accessible to farmers across different regions and languages.
 
-![Dirsha Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen)
+![Dirsha Demo](https://img.shields.io/badge/Live%20Demo-Available-brightgreen)(https://dirsha.vercel.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 🌟 Features
