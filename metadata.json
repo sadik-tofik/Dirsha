@@ -1,0 +1,7 @@
+{
+  "name": "dirsha",
+  "description": "An agricultural support platform for farmers, providing crop advice, market data, a bonds marketplace, and news, with multilingual and voice support.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
