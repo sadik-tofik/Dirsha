@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../hooks/useAppContext';
 import VoiceInput from '../components/VoiceInput';
 
@@ -13,9 +14,12 @@ const FeatureCard: React.FC<{ title: string; description: string; }> = ({ title,
 
 const HomeScreen: React.FC = () => {
     const { t } = useAppContext();
+    const navigate = useNavigate();
 
     const handleVoiceCommand = (command: string) => {
-        alert(`Voice command received: "${command}"\n(Navigation logic would be implemented here)`);
+        if (command && !command.toLowerCase().includes("could not understand")) {
+            navigate('/resources', { state: { command } });
+        }
     }
 
     return (

@@ -1,4 +1,6 @@
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../hooks/useAppContext';
 import { getChatbotResponse } from '../services/geminiService';
 import { ChatMessage, Language } from '../types';
@@ -22,6 +24,8 @@ const ResourcesScreen: React.FC = () => {
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const speak = useCallback((text: string, lang: Language) => {
         if (window.speechSynthesis.speaking) {
@@ -32,33 +36,7 @@ const ResourcesScreen: React.FC = () => {
         window.speechSynthesis.speak(utterance);
     }, []);
     
-    useEffect(() => {
-        const initialMessageText = language === Language.AM 
-            ? "ሰላም! እኔ ድርሻ ነኝ፣ የእርስዎ የግብርና ረዳት። በጽሑፍ ወይም የድምጽ ቁልፉን ተጠቅመው ማንኛውንም ነገር ስለ እርሻ ይጠይቁኝ።"
-            : "Hello! I am Dirsha, your agricultural assistant. Ask me anything about farming by typing or using the voice button.";
-        
-        setMessages([{ sender: 'bot', text: initialMessageText }]);
-
-        return () => {
-            if (window.speechSynthesis.speaking) {
-                window.speechSynthesis.cancel();
-            }
-        };
-    }, [language]);
-    
-    useEffect(() => {
-        const lastMessage = messages[messages.length - 1];
-        if (lastMessage && lastMessage.sender === 'bot') {
-            // Short delay to ensure UI updates before speaking
-            setTimeout(() => speak(lastMessage.text, language), 100);
-        }
-    }, [messages, language, speak]);
-
-    useEffect(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages, isLoading]);
-
-    const sendMessage = async (text: string) => {
+    const sendMessage = useCallback(async (text: string) => {
         if (!text.trim() || isLoading) return;
 
         if (window.speechSynthesis.speaking) {
@@ -75,7 +53,42 @@ const ResourcesScreen: React.FC = () => {
         
         setMessages(prev => [...prev, botMessage]);
         setIsLoading(false);
-    };
+    }, [isLoading, language]);
+    
+    useEffect(() => {
+        const initialMessageText = language === Language.AM 
+            ? "ሰላም! እኔ ድርሻ ነኝ፣ የእርስዎ የግብርና ረዳት። በጽሑፍ ወይም የድምጽ ቁልፉን ተጠቅመው ማንኛውንም ነገር ስለ እርሻ ይጠይቁኝ።"
+            : "Hello! I am Dirsha, your agricultural assistant. Ask me anything about farming by typing or using the voice button.";
+        
+        setMessages([{ sender: 'bot', text: initialMessageText }]);
+
+        return () => {
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+        };
+    }, [language]);
+
+    useEffect(() => {
+        const commandFromHome = location.state?.command;
+        if (commandFromHome) {
+            sendMessage(commandFromHome);
+            // Clear state to prevent re-sending message on re-render
+            navigate(location.pathname, { replace: true, state: null });
+        }
+    }, [location.state, navigate, sendMessage]);
+    
+    useEffect(() => {
+        const lastMessage = messages[messages.length - 1];
+        if (lastMessage && lastMessage.sender === 'bot') {
+            // Short delay to ensure UI updates before speaking
+            setTimeout(() => speak(lastMessage.text, language), 100);
+        }
+    }, [messages, language, speak]);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages, isLoading]);
 
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
