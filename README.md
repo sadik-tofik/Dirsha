@@ -67,9 +67,9 @@ Contributions are what make the open-source community such an amazing place to l
 
 ## 👥 Contributors
 
-- **Solomon Tigabu** - [@solomontigabu](https://github.com/solomontigabu)
+- **Solomon Tigabu** - [@solomontigabu](https://github.com/DesmondSol)
 - **Sadik Tofik** - [@sadiktofik](https://github.com/sadik-tofik)
-- **Sifen Mekonnen** - [@sifenmekonnen](https://github.com/sifenmekonnen)
+- **Sifen Mekonnen** - [@sifenmekonnen](https://github.com/SifenMk)
 - **Netsanet Mulat** - [@netsanetmulat](https://github.com/netsanetmulat)
 
 ## 📄 License
